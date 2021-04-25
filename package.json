@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/gentritabazi01/typeorm-query-parser#readme",
   "devDependencies": {
+    "@types/node": "^14.14.41",
     "class-validator": "^0.13.1",
     "prettier": "^2.2.1",
     "tslint": "^6.1.3",
