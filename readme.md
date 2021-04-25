@@ -2,6 +2,40 @@
 
 Typeorm Query Parser is url string parser for typeorm.
 
+## Installation
+
+```console
+npm i typeorm-simple-query-parser
+```
+
+## Usage Example
+
+```typescript
+import { Get, QueryParams, Param } from 'routing-controllers';
+import { RequestQueryParser } from 'typeorm-simple-query-parser';
+import { MainRepository } from 'typeorm-simple-query-parser';
+
+export class UserController {
+    @Get('/users')
+    public async getAll(@QueryParams() parseResourceOptions: RequestQueryParser) {
+        const resourceOptions = parseResourceOptions.getAll();
+
+        return await this.userRepository.getManyAndCount(resourceOptions);
+    }
+
+    @Get('/users/:id')
+    public async getOne(@Param('id') id: number, @QueryParams() parseResourceOptions: RequestQueryParser) {
+        const resourceOptions = parseResourceOptions.getAll();
+
+        return await this.userRepository.getOneById(id, resourceOptions);
+    }
+}
+
+export class UserRepository extends MainRepository<User> {
+    //
+}
+```
+
 ## Query params
 
 By default, we support these param names:
