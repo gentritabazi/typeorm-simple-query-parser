@@ -36,6 +36,16 @@ export abstract class MainRepository<T> extends Repository<T> {
     });
   }
 
+  public async getMany(resourceOptions?: object) {
+    const alias: string = this.generateAliasName();
+
+    const queryBuilder = this.createQueryBuilder(alias);
+
+    this.applyResourceOptions(alias, resourceOptions, queryBuilder);
+
+    return queryBuilder.getMany();
+  }
+
   public applyResourceOptions(alias: string, options: any, queryBuilder: SelectQueryBuilder<any>) {
     if (!options) {
       return;
