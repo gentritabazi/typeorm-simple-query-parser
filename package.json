@@ -1,5 +1,5 @@
 {
-  "name": "typeorm-query-parser",
+  "name": "typeorm-simple-query-parser",
   "version": "1.0.0",
   "description": "TypeORM Query Parser",
   "main": "lib/index.js",
@@ -15,7 +15,8 @@
   "keywords": [
     "typeorm",
     "typeorm-query-parser",
-    "typeorm-query-builder"
+    "typeorm-query-builder",
+    "typeorm-simple-query-parser"
   ],
   "author": "Gentrit Abazi",
   "license": "MIT",
