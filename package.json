@@ -17,7 +17,8 @@
     "typeorm",
     "typeorm-query-parser",
     "typeorm-query-builder",
-    "typeorm-simple-query-parser"
+    "typeorm-simple-query-parser",
+    "typeorm-url-parser"
   ],
   "author": "Gentrit Abazi",
   "license": "MIT",
