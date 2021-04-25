@@ -21,10 +21,10 @@ export class RequestQueryParser {
       return [];
     }
 
-    let list: any = {};
+    const list: any = {};
 
     if (!isEmpty(this.sortByDesc)) {
-      let sortByDesc = this.sortByDesc.split(',');
+      const sortByDesc = this.sortByDesc.split(',');
 
       sortByDesc.forEach((field: string) => {
         list[field] = 'DESC';
@@ -32,7 +32,7 @@ export class RequestQueryParser {
     }
 
     if (!isEmpty(this.sortByAsc)) {
-      let sortByAsc = this.sortByAsc.split(',');
+      const sortByAsc = this.sortByAsc.split(',');
 
       sortByAsc.forEach((field: string) => {
         list[field] = 'ASC';
@@ -51,11 +51,11 @@ export class RequestQueryParser {
   }
 
   parseFilters(): object[] {
-    let filters = this.filter;
-    let parsedFilters: any = [];
+    const filters = this.filter;
+    const parsedFilters: any = [];
 
-    for (let filter in filters) {
-      let myObj = filters[filter];
+    for (const filter in filters) {
+      const myObj = filters[filter];
       let value: any = null;
       let operator: string = 'eq';
       let not: boolean = false;
@@ -72,8 +72,8 @@ export class RequestQueryParser {
           value = value;
         } else {
           operator = Object.keys(myObj)[0];
-          let operatorValues = myObj[operator];
-          let isNot = Object.keys(operatorValues)[0];
+          const operatorValues = myObj[operator];
+          const isNot = Object.keys(operatorValues)[0];
           not = Boolean(isNot);
           value = operatorValues[isNot];
         }
