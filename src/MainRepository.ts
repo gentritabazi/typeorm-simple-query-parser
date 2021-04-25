@@ -122,6 +122,6 @@ export abstract class MainRepository<T> extends Repository<T> {
   }
 
   public generateAliasName(): string {
-    return (<any>this).constructor.name;
+    return this.metadata.tableNameWithoutPrefix;
   }
 }
