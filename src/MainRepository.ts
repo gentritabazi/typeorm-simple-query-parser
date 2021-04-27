@@ -104,12 +104,7 @@ export abstract class MainRepository<T> extends Repository<T> {
     return this.metadata.tableNameWithoutPrefix;
   }
 
-  public applyFilter(
-    filters: any,
-    filtersByOr: any,
-    queryBuilder: SelectQueryBuilder<any>,
-    alias: string
-  ) {
+  public applyFilter(filters: any, filtersByOr: any, queryBuilder: SelectQueryBuilder<any>, alias: string) {
     queryBuilder.andWhere(
       new Brackets((qb1) => {
         this.buildFilters(qb1, filters, alias);
@@ -125,11 +120,7 @@ export abstract class MainRepository<T> extends Repository<T> {
     );
   }
 
-  public buildFilters(
-    queryBuilder: SelectQueryBuilder<any> | WhereExpression,
-    filters: any,
-    alias: string
-  ) {
+  public buildFilters(queryBuilder: SelectQueryBuilder<any> | WhereExpression, filters: any, alias: string) {
     for (let index = 0; index < filters.length; index++) {
       const element = filters[index];
       const not = element.not;
