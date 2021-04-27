@@ -7,6 +7,7 @@ export class RequestQueryParser {
   public sortByAsc: any;
   public relations: any;
   public filter: any;
+  public filterByOr: any;
 
   parseLimit(): number {
     return Number(this.limit);
@@ -50,8 +51,9 @@ export class RequestQueryParser {
     return this.relations.split(',');
   }
 
-  parseFilters(): object[] {
-    const filters = this.filter;
+  parseFilters(or: boolean = false): object[] {
+    const filters = or ? this.filterByOr : this.filter;
+
     const parsedFilters: any = [];
 
     for (const filter in filters) {
@@ -84,13 +86,25 @@ export class RequestQueryParser {
     return parsedFilters;
   }
 
-  getAll(): { take: number; skip: number; order: object; relations: string[]; filters: object[] } {
+  parseFiltersByOr(): object[] {
+    return this.parseFilters(true);
+  }
+
+  getAll(): {
+    take: number;
+    skip: number;
+    order: object;
+    relations: string[];
+    filters: object[];
+    filtersByOr: object[];
+  } {
     return {
       take: this.parseLimit(),
       skip: (this.getPage() > 0 ? this.getPage() - 1 : 0) * this.parseLimit(),
       order: this.parseSort(),
       relations: this.parseRelations(),
       filters: this.parseFilters(),
+      filtersByOr: this.parseFiltersByOr(),
     };
   }
 }
