@@ -59,7 +59,6 @@ export class RequestQueryParser {
       let value: any = null;
       let operator: string = 'eq';
       let not: boolean = false;
-      let sqlOperator = null;
 
       if (typeof myObj === 'string' || myObj instanceof String) {
         value = myObj;
@@ -79,56 +78,7 @@ export class RequestQueryParser {
         }
       }
 
-      switch (operator) {
-        // String contains
-        case 'ct':
-          value = '%' + value + '%';
-          sqlOperator = not ? 'NOT LIKE' : 'LIKE';
-          break;
-
-        // Equals
-        case 'eq':
-          value = value;
-          sqlOperator = not ? 'NOT !=' : '=';
-          break;
-
-        // Starts with
-        case 'sw':
-          value = value + '%';
-          sqlOperator = not ? 'NOT LIKE' : 'LIKE';
-          break;
-
-        // Ends with
-        case 'ew':
-          value = '%' + value;
-          sqlOperator = not ? 'NOT LIKE' : 'LIKE';
-          break;
-
-        // Greater than
-        case 'gt':
-          sqlOperator = not ? '<' : '>';
-          break;
-
-        // Greater than or equalTo
-        case 'gte':
-          sqlOperator = not ? '<' : '>=';
-          break;
-
-        // Lesser than or equalTo
-        case 'lte':
-          sqlOperator = not ? '>' : '<=';
-          break;
-
-        // Lesser than
-        case 'lt':
-          sqlOperator = not ? '>' : '<';
-          break;
-
-        default:
-          break;
-      }
-
-      parsedFilters.push({ column: filter, operator: operator, sqlOperator: sqlOperator, not: not, value: value });
+      parsedFilters.push({ column: filter, operator: operator, not: not, value: value });
     }
 
     return parsedFilters;
