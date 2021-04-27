@@ -42,6 +42,8 @@ By default, we support these param names:
 
 **filter** - filter GET result by AND type of condition
 
+**filterByOr** - filter GET result by OR type of condition
+
 **relations** - receive joined relational resources in GET result (with all or selected fields)
 
 **sortByDesc** - sort GET result by some field in DESC order
@@ -79,6 +81,12 @@ Filter all books whose author is `Gentrit`.
 
 ```console
 /books?filter[author.name]=Gentrit
+```
+
+Filter all users whose name start with `Gentrit` or ends with `Abazi`.
+
+```console
+/users?filter[name][sw]=Gentrit&filterByOr[name][ew]=Abazi
 ```
 
 #### Operators

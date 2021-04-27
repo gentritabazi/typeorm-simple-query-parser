@@ -1,4 +1,4 @@
-import { Brackets, Repository, SelectQueryBuilder } from 'typeorm';
+import { Brackets, Repository, SelectQueryBuilder, WhereExpression } from 'typeorm';
 
 export abstract class MainRepository<T> extends Repository<T> {
   public async getOne(resourceOptions?: object) {
@@ -93,29 +93,8 @@ export abstract class MainRepository<T> extends Repository<T> {
       });
     }
 
-    if (options.filters) {
-      queryBuilder.where(
-        new Brackets((qb) => {
-          for (let index = 0; index < options.filters.length; index++) {
-            const element = options.filters[index];
-            const elementSplited = element.column.split(/\.(?=[^\.]+$)/);
-            const sqlOperator = element.sqlOperator;
-            let whatToFilter = '';
-
-            if (!element.column.includes('.')) {
-              whatToFilter = alias + '.' + element.column;
-            } else {
-              whatToFilter = alias + '_' + elementSplited[0].split('.').join('_') + '.' + elementSplited[1];
-            }
-
-            if (index === 0) {
-              qb.where(`${whatToFilter} ${sqlOperator} :value` + index, { ['value' + index]: element.value });
-            } else {
-              qb.andWhere(`${whatToFilter} ${sqlOperator} :value` + index, { ['value' + index]: element.value });
-            }
-          }
-        }),
-      );
+    if (options.filters && options.filters.length) {
+      this.applyFilter(options.filters, options.filtersByOr, queryBuilder, alias);
     }
 
     return queryBuilder;
@@ -123,5 +102,126 @@ export abstract class MainRepository<T> extends Repository<T> {
 
   public generateAliasName(): string {
     return this.metadata.tableNameWithoutPrefix;
+  }
+
+  public applyFilter(
+    filters: any,
+    filtersByOr: any,
+    queryBuilder: SelectQueryBuilder<any>,
+    alias: string
+  ) {
+    queryBuilder.andWhere(
+      new Brackets((qb1) => {
+        this.buildFilters(qb1, filters, alias);
+
+        if (filtersByOr | filtersByOr.length) {
+          qb1.orWhere(
+            new Brackets((qb2) => {
+              this.buildFilters(qb2, filtersByOr, alias);
+            }),
+          );
+        }
+      }),
+    );
+  }
+
+  public buildFilters(
+    queryBuilder: SelectQueryBuilder<any> | WhereExpression,
+    filters: any,
+    alias: string
+  ) {
+    for (let index = 0; index < filters.length; index++) {
+      const element = filters[index];
+      const not = element.not;
+      const operator = element.operator;
+      let value = element.value;
+      let sqlOperator = '';
+      let whatToFilter = '';
+      let queryWhere = '';
+      let queryParameters: any = {};
+      let randomStr1 = String((Math.random() * 1e32).toString(36));
+      let randomStr2 = String((Math.random() * 1e32).toString(36));
+      let queryParameterName = String(`(:${randomStr1})`);
+
+      if (!element.column.includes('.')) {
+        whatToFilter = alias + '.' + element.column;
+      } else {
+        let elementSplited = element.column.split(/\.(?=[^\.]+$)/);
+        whatToFilter = alias + '_' + elementSplited[0].split('.').join('_') + '.' + elementSplited[1];
+      }
+
+      // Operators
+      switch (operator) {
+        // String contains
+        case 'ct':
+          value = '%' + value + '%';
+          sqlOperator = not ? 'NOT LIKE' : 'LIKE';
+          break;
+
+        // Equals
+        case 'eq':
+          value = value;
+          sqlOperator = not ? 'NOT !=' : '=';
+          break;
+
+        // Starts with
+        case 'sw':
+          value = value + '%';
+          sqlOperator = not ? 'NOT LIKE' : 'LIKE';
+          break;
+
+        // Ends with
+        case 'ew':
+          value = '%' + value;
+          sqlOperator = not ? 'NOT LIKE' : 'LIKE';
+          break;
+
+        // Greater than
+        case 'gt':
+          sqlOperator = not ? '<' : '>';
+          break;
+
+        // Greater than or equalTo
+        case 'gte':
+          sqlOperator = not ? '<' : '>=';
+          break;
+
+        // Lesser than or equalTo
+        case 'lte':
+          sqlOperator = not ? '>' : '<=';
+          break;
+
+        // Lesser than
+        case 'lt':
+          sqlOperator = not ? '>' : '<';
+          break;
+
+        // In array
+        case 'in':
+          value = value.split(',');
+          sqlOperator = not ? 'NOT IN' : 'IN';
+          break;
+
+        // Between
+        case 'bt':
+          const firstValue = value.split(',')[0];
+          const secondValue = value.split(',')[1];
+          queryParameterName = String(`:${randomStr1} AND :${randomStr2}`);
+          queryParameters = { [String(randomStr1)]: firstValue, [String(randomStr2)]: secondValue };
+          sqlOperator = not ? 'NOT BETWEEN' : 'BETWEEN';
+          break;
+
+        default:
+          break;
+      }
+
+      if (Object.keys(queryParameters).length == 0) {
+        queryParameters = { [String(randomStr1)]: value };
+      }
+
+      queryWhere = `${whatToFilter} ${sqlOperator} ` + queryParameterName;
+
+      queryBuilder.andWhere(queryWhere, queryParameters);
+    }
   }
 }
