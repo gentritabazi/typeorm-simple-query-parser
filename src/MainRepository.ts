@@ -28,12 +28,10 @@ export abstract class MainRepository<T> extends Repository<T> {
 
     this.applyResourceOptions(alias, resourceOptions, queryBuilder);
 
-    return queryBuilder.getManyAndCount().then((result) => {
-      return {
-        total_data: result[1],
-        rows: result[0],
-      };
-    });
+    return {
+      total_data: await queryBuilder.getCount(),
+      rows: await queryBuilder.getMany(),
+    };
   }
 
   public async getMany(resourceOptions?: object) {
