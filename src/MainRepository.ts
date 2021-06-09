@@ -16,7 +16,7 @@ export abstract class MainRepository<T> extends Repository<T> {
 
     this.applyResourceOptions(alias, resourceOptions, queryBuilder);
 
-    queryBuilder.where(`${alias}.id = :id`, { id: id });
+    queryBuilder.andWhere(`${alias}.id = :id`, { id: id });
 
     return queryBuilder.getOne();
   }
