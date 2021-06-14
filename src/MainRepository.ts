@@ -69,7 +69,7 @@ export abstract class MainRepository<T> extends Repository<T> {
     }
 
     if (options.skip) {
-      queryBuilder.offset(options.skip);
+      queryBuilder.skip(options.skip);
     }
 
     if (options.relations) {
