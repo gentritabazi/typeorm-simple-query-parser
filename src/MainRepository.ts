@@ -65,7 +65,7 @@ export abstract class MainRepository<T> extends Repository<T> {
     }
 
     if (options.take) {
-      queryBuilder.limit(options.take);
+      queryBuilder.take(options.take);
     }
 
     if (options.skip) {

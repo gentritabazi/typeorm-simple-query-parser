@@ -100,7 +100,7 @@ export class RequestQueryParser {
   } {
     return {
       take: this.parseLimit(),
-      skip: (this.getPage() > 0 ? this.getPage() - 1 : 0) * this.parseLimit(),
+      skip: (this.getPage() - 1) * this.parseLimit(),
       order: this.parseSort(),
       relations: this.parseRelations(),
       filters: this.parseFilters(),
