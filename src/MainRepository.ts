@@ -44,7 +44,7 @@ export abstract class MainRepository<T> extends Repository<T> {
     return queryBuilder.getMany();
   }
 
-  public applyResourceOptions(alias: string, options: any, queryBuilder: SelectQueryBuilder<any>) {
+  public applyResourceOptions(mainAlias: string, options: any, queryBuilder: SelectQueryBuilder<any>) {
     if (!options) {
       return;
     }
@@ -55,9 +55,9 @@ export abstract class MainRepository<T> extends Repository<T> {
         let whatToSort = '';
 
         if (!sort.includes('.')) {
-          whatToSort = alias + '.' + sort;
+          whatToSort = mainAlias + '.' + sort;
         } else {
-          whatToSort = alias + '_' + sortSplited[0].split('.').join('_') + '.' + sortSplited[1];
+          whatToSort = mainAlias + '__' + sortSplited[0].split('.').join('__') + '.' + sortSplited[1];
         }
 
         queryBuilder.addOrderBy(whatToSort, options.order[sort].order);
@@ -73,26 +73,22 @@ export abstract class MainRepository<T> extends Repository<T> {
     }
 
     if (options.relations) {
-      options.relations.forEach((element: any) => {
-        const splitedElement = element.split('.');
-        let newAlias = '';
-        let fullRelation = '';
+      options.relations.forEach((relation: string) => {
+        const splitedRelation = relation.split('.');
+        let alias = '';
+        let property = '';
 
-        for (let index = 0; index < splitedElement.length; index++) {
-          if (index === 0) {
-            newAlias = alias;
-          }
+        for (let index = 0; index < splitedRelation.length; index++) {
+          property = index === 0 ? mainAlias + '.' + splitedRelation[index] : alias + '.' + splitedRelation[index];
+          alias = index === 0 ? mainAlias + '__' + splitedRelation[index] : alias + '__' + splitedRelation[index];
 
-          fullRelation = newAlias + '.' + splitedElement[index];
-          newAlias = newAlias + '_' + splitedElement[index];
-
-          queryBuilder.leftJoinAndSelect(fullRelation, newAlias);
+          queryBuilder.leftJoinAndSelect(property, alias);
         }
       });
     }
 
     if (options.filters && options.filters.length) {
-      this.applyFilter(options.filters, options.filtersByOr, queryBuilder, alias);
+      this.applyFilter(options.filters, options.filtersByOr, queryBuilder, mainAlias);
     }
 
     return queryBuilder;
@@ -136,7 +132,7 @@ export abstract class MainRepository<T> extends Repository<T> {
         whatToFilter = alias + '.' + element.column;
       } else {
         let elementSplited = element.column.split(/\.(?=[^\.]+$)/);
-        whatToFilter = alias + '_' + elementSplited[0].split('.').join('_') + '.' + elementSplited[1];
+        whatToFilter = alias + '__' + elementSplited[0].split('.').join('__') + '.' + elementSplited[1];
       }
 
       // Operators
