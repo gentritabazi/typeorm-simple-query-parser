@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "code:format": "prettier --write \"src/**/*.ts\"",
+    "code:check": "prettier --check \"src/**/*.ts\"",
     "prepare": "npm run build"
   },
   "repository": {
