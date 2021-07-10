@@ -168,3 +168,18 @@ You can load nested relationships using the dot `.` notation:
 ```url
 /users?relations=logs.causer
 ```
+
+### Tip
+
+You also can control relations, limit and more in controller like this:
+
+```ts
+@Get('/users')
+public async getAll(@QueryParams() parseResourceOptions: RequestQueryParser) {
+    const resourceOptions = parseResourceOptions.getAll();
+
+    resourceOptions.skip = 1;
+
+    return await this.userRepository.getManyAndCount(resourceOptions);
+}
+```
