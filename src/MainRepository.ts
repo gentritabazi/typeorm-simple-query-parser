@@ -82,6 +82,19 @@ export abstract class MainRepository<T> extends Repository<T> {
           property = index === 0 ? mainAlias + '.' + splitedRelation[index] : alias + '.' + splitedRelation[index];
           alias = index === 0 ? mainAlias + '__' + splitedRelation[index] : alias + '__' + splitedRelation[index];
 
+          const scopeIndex = options.scopes.findIndex((scope: any) => {
+            return alias == `${mainAlias + '__'}${scope.name.split('.').join('__')}`;
+          });
+
+          if (scopeIndex > -1) {
+            return queryBuilder.leftJoinAndSelect(
+              property,
+              alias,
+              options.scopes[scopeIndex].condition.replace('{alias}', alias),
+              options.scopes[scopeIndex].parameters,
+            );
+          }
+
           queryBuilder.leftJoinAndSelect(property, alias);
         }
       });

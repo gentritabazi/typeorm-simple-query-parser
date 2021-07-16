@@ -183,3 +183,22 @@ public async getAll(@QueryParams() parseResourceOptions: RequestQueryParser) {
     return await this.userRepository.getManyAndCount(resourceOptions);
 }
 ```
+
+You also can control relations with scopes and conditions:
+
+```ts
+@Get('/users')
+public async getAll(@QueryParams() parseResourceOptions: RequestQueryParser) {
+    const resourceOptions = parseResourceOptions.getAll();
+
+    resourceOptions.scopes = [
+	{
+	    name: "user.posts",
+	    condition: "posts.active = :active",
+	    parameters: { active: true },
+	}
+    ]
+
+    return await this.userRepository.getManyAndCount(resourceOptions);
+}
+```

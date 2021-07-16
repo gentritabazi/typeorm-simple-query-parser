@@ -8,6 +8,7 @@ export class RequestQueryParser {
   public relations: any;
   public filter: any;
   public filterByOr: any;
+  public scopes: any;
 
   parseLimit(): number {
     return Number(this.limit);
@@ -97,6 +98,7 @@ export class RequestQueryParser {
     relations: string[];
     filters: object[];
     filtersByOr: object[];
+    scopes: object[];
   } {
     return {
       take: this.parseLimit(),
@@ -105,6 +107,7 @@ export class RequestQueryParser {
       relations: this.parseRelations(),
       filters: this.parseFilters(),
       filtersByOr: this.parseFiltersByOr(),
+      scopes: this.scopes,
     };
   }
 }
