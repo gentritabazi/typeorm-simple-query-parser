@@ -193,7 +193,7 @@ public async getAll(@QueryParams() parseResourceOptions: RequestQueryParser) {
 
     resourceOptions.scopes = [
 	{
-	    name: "users.posts",
+	    name: "posts",
 	    condition: "{alias}.active = :active",
 	    parameters: { active: true },
 	}
