@@ -1,6 +1,6 @@
 {
   "name": "typeorm-simple-query-parser",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "TypeORM Query Parser",
   "main": "lib/index.js",
   "scripts": {
