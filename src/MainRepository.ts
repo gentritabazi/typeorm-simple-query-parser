@@ -60,7 +60,7 @@ export abstract class MainRepository<T> extends Repository<T> {
           whatToSort = mainAlias + '__' + sortSplited[0].split('.').join('__') + '.' + sortSplited[1];
         }
 
-        queryBuilder.addOrderBy(whatToSort, options.order[sort].order);
+        queryBuilder.addOrderBy(whatToSort, options.order[sort]);
       }
     }
 
