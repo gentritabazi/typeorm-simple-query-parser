@@ -55,8 +55,6 @@ By default, we support these param names:
 **page** - receive a portion of limited amount of resources
 
 
-Here is the description of each of those using default params names:
-
 ### Filters
 
 The way a filter should be formed is:
@@ -105,6 +103,7 @@ in | In array
 bt | Between
 
 ### Pagination
+
 Two parameters are available: limit and page. limit will determine the number of records per page and page will determine the current page.
 
 ```console
@@ -143,7 +142,7 @@ You can sort multiple columns separating them with a comma:
 
 The `relations` query parameter will load any relation on the resulting models.
 
-#### Basic usage
+##### Basic usage
 
 The following query parameter will include the `logs` relation:
 
@@ -153,7 +152,7 @@ The following query parameter will include the `logs` relation:
 
 Users will have all their their `logs` related models loaded.
 
-#### Load multiple
+##### Load multiple
 
 You can load multiple relationships by separating them with a comma:
 
@@ -161,7 +160,7 @@ You can load multiple relationships by separating them with a comma:
 /users?relations=logs,tasks
 ```
 
-#### Load nested
+##### Load nested
 
 You can load nested relationships using the dot `.` notation:
 
