@@ -91,6 +91,14 @@ export class RequestQueryParser {
     return this.parseFilters(true);
   }
 
+  parseScopes(): object[] {
+    if (isEmpty(this.scopes)) {
+      return [];
+    }
+
+    return this.scopes;
+  }
+
   getAll(): {
     take: number;
     skip: number;
@@ -107,7 +115,7 @@ export class RequestQueryParser {
       relations: this.parseRelations(),
       filters: this.parseFilters(),
       filtersByOr: this.parseFiltersByOr(),
-      scopes: this.scopes,
+      scopes: this.parseScopes(),
     };
   }
 }
