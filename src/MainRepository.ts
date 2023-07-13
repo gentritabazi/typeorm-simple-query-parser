@@ -209,6 +209,11 @@ export abstract class MainRepository<T> extends Repository<T> {
           sqlOperator = not ? 'NOT BETWEEN' : 'BETWEEN';
           break;
 
+        // IS NULL / NOT MULL
+        case 'nullcheck':
+          sqlOperator = not ? 'IS NOT' : 'IS';
+          break;
+
         default:
           break;
       }
@@ -217,7 +222,11 @@ export abstract class MainRepository<T> extends Repository<T> {
         queryParameters = { [String(randomStr1)]: value };
       }
 
-      queryWhere = `${whatToFilter} ${sqlOperator} ` + queryParameterName;
+      if(operator === "nullcheck") {
+        queryWhere = `${whatToFilter} ${sqlOperator} NULL` ;
+      } else {
+        queryWhere = `${whatToFilter} ${sqlOperator} ` + queryParameterName;
+      }
 
       queryBuilder.andWhere(queryWhere, queryParameters);
     }
