@@ -1,17 +1,17 @@
 {
-  "name": "typeorm-simple-query-parser",
-  "version": "1.0.16",
+  "name": "@dharapvj/typeorm-simple-query-parser",
+  "version": "1.0.18",
   "description": "TypeORM Query Parser",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "./node_modules/typescript/bin/tsc",
     "code:format": "prettier --write \"src/**/*.ts\"",
     "code:check": "prettier --check \"src/**/*.ts\"",
     "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gentritabazi01/typeorm-query-parser.git"
+    "url": "git+https://github.com/dharapvj/typeorm-query-parser.git"
   },
   "keywords": [
     "typeorm",
