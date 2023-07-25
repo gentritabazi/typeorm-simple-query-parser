@@ -222,8 +222,8 @@ export abstract class MainRepository<T> extends Repository<T> {
         queryParameters = { [String(randomStr1)]: value };
       }
 
-      if(operator === "nullcheck") {
-        queryWhere = `${whatToFilter} ${sqlOperator} NULL` ;
+      if (operator === 'nullcheck') {
+        queryWhere = `${whatToFilter} ${sqlOperator} NULL`;
       } else {
         queryWhere = `${whatToFilter} ${sqlOperator} ` + queryParameterName;
       }
