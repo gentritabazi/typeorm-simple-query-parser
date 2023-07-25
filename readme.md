@@ -101,6 +101,7 @@ lt | Lesser than
 lte | Lesser than or equalTo
 in | In array
 bt | Between
+nullcheck | is / is not null
 
 ### Pagination
 
