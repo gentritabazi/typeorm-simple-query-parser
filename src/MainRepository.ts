@@ -210,7 +210,7 @@ export abstract class MainRepository<T> extends Repository<T> {
           break;
 
         // IS NULL / NOT MULL
-        case 'nullcheck':
+        case 'nch':
           sqlOperator = not ? 'IS NOT' : 'IS';
           break;
 
